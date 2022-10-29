@@ -38,12 +38,29 @@ function getRandomNoteStyle() {
 
 function updateNotesCount() {
   const notesCount = notesContainer.children.length;
-  notesCountLabel.textContent = `${notesCount} note`;
+  notesCountLabel.textContent = `${notesCount} note${
+    notesCount !== 1 ? 's' : ''
+  }
+  `;
 }
 
 //add note
 btnAddNote.addEventListener('click', () => {
   const note = createNoteElement();
+
+  //delete prompt when double clicked
+  note.addEventListener('dblclick', () => {
+    const title = note.querySelector('.note-title').value;
+    const removeNote = confirm(`Are you wish to delete ${title} ? `);
+
+    if (!removeNote) {
+      return;
+    }
+
+    //remove the note
+    note.remove();
+    updateNotesCount();
+  });
 
   notesContainer.appendChild(note);
   updateNotesCount();
